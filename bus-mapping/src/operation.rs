@@ -12,10 +12,11 @@ use strum_macros::EnumIter;
 
 use core::{cmp::Ordering, fmt, fmt::Debug};
 use eth_types::{Address, Word};
+use serde::{Deserialize, Serialize};
 use std::mem::swap;
 
 /// Marker that defines whether an Operation performs a `READ` or a `WRITE`.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
 pub enum RW {
     /// Marks op as READ.
     READ,
@@ -38,7 +39,7 @@ impl RW {
 /// Wrapper type over `usize` which represents the global counter. The purpose
 /// of the `RWCounter` is to enforce that each Opcode/Instruction and Operation
 /// is unique and just executed once.
-#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Deserialize, Serialize)]
 pub struct RWCounter(pub usize);
 
 impl fmt::Debug for RWCounter {
@@ -91,7 +92,7 @@ impl RWCounter {
 }
 
 /// Enum used to differenciate between EVM Stack, Memory and Storage operations.
-#[derive(Debug, Clone, PartialEq, Eq, Copy, EnumIter, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Copy, EnumIter, Hash, Deserialize, Serialize)]
 pub enum Target {
     /// Start is a padding operation.
     Start = 1,
@@ -152,7 +153,7 @@ pub trait Op: Clone + Eq + Ord {
 /// Represents a [`READ`](RW::READ)/[`WRITE`](RW::WRITE) into the memory implied
 /// by an specific [`OpcodeId`](eth_types::evm_types::opcode_ids::OpcodeId) of
 /// the [`ExecStep`](crate::circuit_input_builder::ExecStep).
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct MemoryOp {
     /// Call ID
     pub call_id: usize,
@@ -229,7 +230,7 @@ impl Ord for MemoryOp {
 /// Represents a [`READ`](RW::READ)/[`WRITE`](RW::WRITE) into the stack implied
 /// by an specific [`OpcodeId`](eth_types::evm_types::opcode_ids::OpcodeId) of
 /// the [`ExecStep`](crate::circuit_input_builder::ExecStep).
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct StackOp {
     /// Call ID
     pub call_id: usize,
@@ -307,7 +308,7 @@ impl Ord for StackOp {
 /// implied by an specific
 /// [`OpcodeId`](eth_types::evm_types::opcode_ids::OpcodeId) of
 /// the [`ExecStep`](crate::circuit_input_builder::ExecStep).
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct StorageOp {
     /// Account Address
     pub address: Address,
@@ -407,7 +408,7 @@ impl Ord for StorageOp {
 /// Represents a change in the Account AccessList implied by a `BeginTx`,
 /// `EXTCODECOPY`, `EXTCODESIZE`, `EXTCODEHASH` `BALANCE`, `SELFDESTRUCT`,
 /// `*CALL`* or `CREATE*` step.
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct TxAccessListAccountOp {
     /// Transaction ID: Transaction index in the block starting at 1.
     pub tx_id: usize,
@@ -457,7 +458,7 @@ impl Op for TxAccessListAccountOp {
 
 /// Represents a change in the Storage AccessList implied by an `SSTORE` or
 /// `SLOAD` step of the [`ExecStep`](crate::circuit_input_builder::ExecStep).
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct TxAccessListAccountStorageOp {
     /// Transaction ID: Transaction index in the block starting at 1.
     pub tx_id: usize,
@@ -509,7 +510,7 @@ impl Op for TxAccessListAccountStorageOp {
 /// Represents a change in the Transaction Refund AccessList implied by an
 /// `SSTORE`, `STOP`, `RETURN` or `REVERT` step of the
 /// [`ExecStep`](crate::circuit_input_builder::ExecStep).
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct TxRefundOp {
     /// Transaction ID: Transaction index in the block starting at 1.
     pub tx_id: usize,
@@ -556,7 +557,7 @@ impl Op for TxRefundOp {
 
 /// Represents a field parameter of the Account that can be accessed via EVM
 /// execution.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
 pub enum AccountField {
     /// Account Nonce
     Nonce,
@@ -569,7 +570,7 @@ pub enum AccountField {
 /// Represents a change in the Account field implied by a `BeginTx`,
 /// `EXTCODECOPY`, `EXTCODESIZE`, `BALANCE`, `SELFDESTRUCT`, `*CALL`*,
 /// `CREATE*`, `STOP`, `RETURN` or `REVERT` step.
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct AccountOp {
     /// Account Address
     pub address: Address,
@@ -635,7 +636,7 @@ impl Op for AccountOp {
 
 /// Represents a field parameter of the CallContext that can be accessed via EVM
 /// execution.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
 pub enum CallContextField {
     /// RwCounterEndOfReversion
     RwCounterEndOfReversion,
@@ -690,7 +691,7 @@ pub enum CallContextField {
 }
 
 /// Represents an CallContext read/write operation.
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct CallContextOp {
     /// call_id of CallContext
     pub call_id: usize,
@@ -761,7 +762,7 @@ impl CallContextOp {
 
 /// Represents a field parameter of the TxLog that can be accessed via EVM
 /// execution.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
 pub enum TxLogField {
     /// contract address
     Address,
@@ -774,7 +775,7 @@ pub enum TxLogField {
 }
 
 /// Represents TxLog read/write operation.
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct TxLogOp {
     /// tx_id of TxLog, starts with 1 in rw table, and it's unique per Tx
     pub tx_id: usize,
@@ -848,7 +849,7 @@ impl Op for TxLogOp {
 
 /// Represents a field parameter of the TxReceipt that can be accessed via EVM
 /// execution.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
 pub enum TxReceiptField {
     /// flag indicates whether a tx succeed or not
     PostStateOrStatus,
@@ -860,7 +861,7 @@ pub enum TxReceiptField {
 }
 
 /// Represent a Start padding operation
-#[derive(Clone, PartialEq, Eq, Debug)]
+#[derive(Clone, PartialEq, Eq, Debug, Deserialize, Serialize)]
 pub struct StartOp {}
 
 impl PartialOrd for StartOp {
@@ -886,7 +887,7 @@ impl Op for StartOp {
 }
 
 /// Represents TxReceipt read/write operation.
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct TxReceiptOp {
     /// tx_id of TxReceipt
     pub tx_id: usize,
@@ -931,7 +932,7 @@ impl Op for TxReceiptOp {
 
 /// Generic enum that wraps over all the operation types possible.
 /// In particular [`StackOp`], [`MemoryOp`] and [`StorageOp`].
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub enum OpEnum {
     /// Stack
     Stack(StackOp),
@@ -958,7 +959,7 @@ pub enum OpEnum {
 }
 
 /// Operation is a Wrapper over a type that implements Op with a RWCounter.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Operation<T: Op> {
     rwc: RWCounter,
     rw: RW,

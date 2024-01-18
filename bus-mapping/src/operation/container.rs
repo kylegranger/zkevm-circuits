@@ -5,6 +5,7 @@ use super::{
 };
 use crate::exec_trace::OperationRef;
 use itertools::Itertools;
+use serde::{Deserialize, Serialize};
 
 /// The `OperationContainer` is meant to store all of the [`Operation`]s that an
 /// [`ExecStep`](crate::circuit_input_builder::ExecStep) performs during its
@@ -20,7 +21,7 @@ use itertools::Itertools;
 /// they have specified.
 /// That serves as a way to get an input with which is easy to work with in
 /// order to construct the State proof.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct OperationContainer {
     /// Operations of MemoryOp
     pub memory: Vec<Operation<MemoryOp>>,

@@ -5,11 +5,11 @@ use core::{
     str::FromStr,
 };
 use itertools::Itertools;
-use serde::{Serialize, Serializer};
+use serde::{Deserialize, Serialize, Serializer};
 use std::fmt;
 
 /// Represents a `MemoryAddress` of the EVM.
-#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Deserialize, Serialize)]
 pub struct MemoryAddress(pub usize);
 
 impl fmt::Debug for MemoryAddress {

@@ -6,7 +6,7 @@ use std::fmt;
 
 /// Represents a `StackAddress` of the EVM.
 /// The address range goes `TOP -> DOWN (1024, 0]`.
-#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Deserialize, Serialize)]
 pub struct StackAddress(pub usize);
 
 impl fmt::Debug for StackAddress {

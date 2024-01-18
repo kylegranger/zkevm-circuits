@@ -3,6 +3,7 @@
 use core::fmt::{Display, Formatter, Result as FmtResult};
 use eth_types::{evm_types::OpcodeId, Address, GethExecStep, Word, H256};
 use ethers_providers::ProviderError;
+use serde::{Deserialize, Serialize};
 use std::error::Error as StdError;
 
 use crate::geth_errors::{
@@ -63,7 +64,7 @@ impl Display for Error {
 impl StdError for Error {}
 
 /// Out of Gas errors by opcode
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub enum OogError {
     /// Out of Gas for opcodes which have non-zero constant gas cost
     Constant,
@@ -99,7 +100,7 @@ pub enum OogError {
 }
 
 /// EVM Execution Error
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub enum ExecError {
     /// Invalid Opcode
     InvalidOpcode,

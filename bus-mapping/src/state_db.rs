@@ -4,6 +4,7 @@
 use eth_types::{geth_types, Address, Hash, Word, H256, U256};
 use ethers_core::utils::keccak256;
 use lazy_static::lazy_static;
+use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 
 lazy_static! {
@@ -20,7 +21,7 @@ lazy_static! {
 const VALUE_ZERO: Word = Word::zero();
 
 /// Memory storage for contract code by code hash.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct CodeDB(pub HashMap<Hash, Vec<u8>>);
 
 impl Default for CodeDB {

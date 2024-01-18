@@ -1,9 +1,10 @@
 //! This module contains the logic for parsing and interacting with EVM
 //! execution traces.
 use crate::operation::Target;
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Deserialize, Serialize)]
 /// The target and index of an `Operation` in the context of an
 /// `ExecutionTrace`.
 pub struct OperationRef(pub Target, pub usize);

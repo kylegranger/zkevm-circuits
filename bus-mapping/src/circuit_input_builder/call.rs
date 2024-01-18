@@ -4,9 +4,10 @@ use eth_types::{
     evm_types::{Memory, OpcodeId},
     Address, Hash, Word,
 };
+use serde::{Deserialize, Serialize};
 
 /// Type of a *CALL*/CREATE* Function.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub enum CallKind {
     /// CALL
     Call,
@@ -51,7 +52,7 @@ impl TryFrom<OpcodeId> for CallKind {
 }
 
 /// Circuit Input related to an Ethereum Call
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Call {
     /// Unique call identifier within the Block.
     pub call_id: usize,

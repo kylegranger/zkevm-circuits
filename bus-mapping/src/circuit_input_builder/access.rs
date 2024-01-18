@@ -1,6 +1,7 @@
 use crate::{operation::RW, Error};
 use eth_types::{evm_types::OpcodeId, Address, GethExecStep, GethExecTrace, ToAddress, Word};
 use ethers_core::utils::get_contract_address;
+use serde::{Deserialize, Serialize};
 use std::collections::{hash_map::Entry, HashMap, HashSet};
 
 use AccessValue::{Account, Code, Storage};
@@ -95,7 +96,7 @@ impl From<Vec<Access>> for AccessSet {
 }
 
 /// Source of the code in the EVM execution.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Serialize)]
 pub enum CodeSource {
     /// Code comes from a deployed contract at `Address`.
     Address(Address),

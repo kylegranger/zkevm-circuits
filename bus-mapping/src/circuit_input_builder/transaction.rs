@@ -4,6 +4,7 @@ use std::collections::BTreeMap;
 
 use eth_types::{evm_types::Memory, geth_types, GethExecTrace};
 use ethers_core::utils::get_contract_address;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     state_db::{CodeDB, StateDB},
@@ -181,7 +182,7 @@ impl TransactionContext {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
 /// Result of the parsing of an Ethereum Transaction.
 pub struct Transaction {
     /// The raw transaction fields

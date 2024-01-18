@@ -10,10 +10,11 @@ use eth_types::{
 };
 use gadgets::impl_expr;
 use halo2_proofs::plonk::Expression;
+use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 /// An execution step of the EVM.
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct ExecStep {
     /// Execution state
     pub exec_state: ExecState,
@@ -128,7 +129,7 @@ impl ExecStep {
 }
 
 /// Execution state
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 pub enum ExecState {
     /// EVM Opcode ID
     Op(OpcodeId),
@@ -187,7 +188,7 @@ impl ExecState {
 }
 
 /// Defines the various source/destination types for a copy event.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, EnumIter)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, EnumIter, Deserialize, Serialize)]
 pub enum CopyDataType {
     /// When we need to pad the Copy rows of the circuit up to a certain maximum
     /// with rows that are not "useful".
@@ -222,7 +223,7 @@ impl_expr!(CopyDataType);
 
 /// Defines a single copy step in a copy event. This type is unified over the
 /// source/destination row in the copy table.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct CopyStep {
     /// Byte value copied in this step.
     pub value: u8,
@@ -232,7 +233,7 @@ pub struct CopyStep {
 }
 
 /// Defines an enum type that can hold either a number or a hash value.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub enum NumberOrHash {
     /// Variant to indicate a number value.
     Number(usize),
@@ -243,7 +244,7 @@ pub enum NumberOrHash {
 /// Defines a copy event associated with EVM opcodes such as CALLDATACOPY,
 /// CODECOPY, CREATE, etc. More information:
 /// <https://github.com/privacy-scaling-explorations/zkevm-specs/blob/master/specs/copy-proof.md>.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CopyEvent {
     /// Represents the start address at the source of the copy event.
     pub src_addr: u64,
@@ -306,7 +307,7 @@ impl CopyEvent {
 }
 
 /// Intermediary multiplication step, representing `a * b == d (mod 2^256)`
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 pub struct ExpStep {
     /// First multiplicand.
     pub a: Word,
@@ -327,7 +328,7 @@ impl From<(Word, Word, Word)> for ExpStep {
 }
 
 /// Event representating an exponentiation `a ^ b == d (mod 2^256)`.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ExpEvent {
     /// Identifier for the exponentiation trace.
     pub identifier: usize,

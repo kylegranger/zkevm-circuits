@@ -16,7 +16,7 @@ use ethers_signers::{LocalWallet, Signer};
 use halo2_proofs::halo2curves::{group::ff::PrimeField, secp256k1};
 use num::Integer;
 use num_bigint::BigUint;
-use serde::{Serialize, Serializer};
+use serde::{Deserialize, Serialize, Serializer};
 use serde_with::serde_as;
 use sha3::{Digest, Keccak256};
 use std::collections::HashMap;
@@ -116,7 +116,7 @@ impl BlockConstants {
 }
 
 /// Definition of all of the constants related to an Ethereum transaction.
-#[derive(Debug, Default, Clone, Serialize)]
+#[derive(Debug, Default, Clone, Deserialize, Serialize)]
 pub struct Transaction {
     /// Sender address
     pub from: Address,
