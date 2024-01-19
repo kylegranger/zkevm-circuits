@@ -1,7 +1,7 @@
 //! Evm types needed for parsing instruction sets as well
 
 use serde::{Deserialize, Serialize};
-use std::fmt;
+use std::{fmt, marker::ConstParamTy};
 
 pub mod gas_utils;
 pub mod memory;
@@ -80,7 +80,9 @@ pub const MAX_REFUND_QUOTIENT_OF_GAS_USED: usize = 5;
 pub const GAS_STIPEND_CALL_WITH_VALUE: u64 = 2300;
 
 /// Defines the gas consumption.
-#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Serialize, Deserialize, Default)]
+#[derive(
+    Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Serialize, Deserialize, Default, ConstParamTy,
+)]
 pub struct GasCost(pub u64);
 
 impl fmt::Display for GasCost {
