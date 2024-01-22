@@ -493,7 +493,9 @@ impl<P: JsonRpcClient> BuilderClient<P> {
         circuits_params: CircuitsParams,
         protocol_instance: Option<ProtocolInstance>,
     ) -> Result<Self, Error> {
+        println!("*** BuilderClient new 1");
         let chain_id = client.get_chain_id().await?;
+        println!("*** BuilderClient new 2");
 
         Ok(Self {
             cli: client,
