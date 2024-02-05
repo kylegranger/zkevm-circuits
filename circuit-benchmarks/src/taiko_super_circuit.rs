@@ -111,6 +111,24 @@ pub fn evm_verify(deployment_code: Vec<u8>, instances: Vec<Vec<Fr>>, proof: Vec<
     }
 }
 
+/// for chain to verify
+pub fn gevulot_evm_verify(
+    deployment_code: Vec<u8>,
+    instances: Vec<Vec<Fr>>,
+    proof: Vec<u8>,
+) -> Result<u64, String> {
+    let calldata = encode_calldata(&instances, &proof);
+    println!(
+        "deploy code size: {} bytes, instances size: [{}][{}], calldata: {}",
+        deployment_code.len(),
+        instances.len(),
+        instances[0].len(),
+        calldata.len(),
+    );
+
+    deploy_and_call(deployment_code, calldata)
+}
+
 #[cfg(test)]
 mod tests {
     use ark_std::{end_timer, start_timer};
