@@ -87,7 +87,7 @@ pub fn gen_verifier(
     };
 
     let sol = loader.solidity_code();
-    fs::write(Path::new("./aggregation_plonk.sol"), &sol).unwrap();
+    // fs::write(Path::new("./aggregation_plonk.sol"), &sol).unwrap();
     sol
 }
 
